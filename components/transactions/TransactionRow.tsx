@@ -1,8 +1,13 @@
 import type { Transaction, TransactionType } from '@/types/api'
-import { Icon, type IconName, Money } from '@/components/ui'
-import { formatDateTime, TRANSACTION_TYPE_LABELS } from '@/lib/format'
-import { StatusDot } from './StatusDot'
+import { Icon, type IconName } from '@/components/ui'
+import { formatMoney, formatTime, TRANSACTION_TYPE_LABELS } from '@/lib/format'
+import { StatusBadge } from './StatusBadge'
 import styles from './TransactionRow.module.css'
+import {
+  formatSignedTransactionAmount,
+  getCounterpartyInitials,
+  isCreditTransaction,
+} from './transactionUtils'
 
 const TYPE_ICONS: Record<TransactionType, IconName> = {
   deposit: 'arrow-down-left',
@@ -14,36 +19,42 @@ const TYPE_ICONS: Record<TransactionType, IconName> = {
   bill_payment: 'receipt',
 }
 
-const CREDIT_TYPES: TransactionType[] = ['deposit', 'transfer_in', 'conversion']
-
 export interface TransactionRowProps {
   transaction: Transaction
   onSelect?: (transaction: Transaction) => void
 }
 
 export function TransactionRow({ transaction: tx, onSelect }: TransactionRowProps) {
-  const isCredit = CREDIT_TYPES.includes(tx.type)
+  const isCredit = isCreditTransaction(tx.type)
+  const initials =
+    tx.type === 'transfer_in' || tx.type === 'transfer_out' ? getCounterpartyInitials(tx.counterparty) : ''
 
   return (
     <button type="button" className={styles.row} onClick={() => onSelect?.(tx)}>
-      <span className={styles.icon}>
-        <Icon name={TYPE_ICONS[tx.type]} size={18} />
-      </span>
+      {initials ? (
+        <span className={styles.initials} aria-hidden>
+          {initials}
+        </span>
+      ) : (
+        <span className={styles.icon} aria-hidden>
+          <Icon name={TYPE_ICONS[tx.type]} size={18} />
+        </span>
+      )}
       <span className={styles.main}>
         <span className={styles.title}>{TRANSACTION_TYPE_LABELS[tx.type]}</span>
-        <span className={styles.narration} dangerouslySetInnerHTML={{ __html: tx.narration }} />
+        <span className={styles.narration}>{tx.narration}</span>
       </span>
-      <StatusDot status={tx.status} />
+      <span className={styles.status}>
+        <StatusBadge status={tx.status} />
+      </span>
       <span className={styles.end}>
-        <Money
-          amount={tx.amount}
-          currency={tx.currency}
-          sign={isCredit ? 'credit' : 'debit'}
-          className={isCredit ? styles.credit : styles.amount}
-        />
+        <span className={isCredit ? styles.credit : styles.amount}>{formatSignedTransactionAmount(tx)}</span>
+        <span className={styles.mobileStatus}>
+          <StatusBadge status={tx.status} />
+        </span>
         <span className={styles.meta}>
-          {formatDateTime(tx.createdAt)}
-          {tx.fee > 0 && ` · Fee ₦${tx.fee}`}
+          {formatTime(tx.createdAt)}
+          {tx.fee > 0 && ` · Fee ${formatMoney(tx.fee, tx.currency)}`}
         </span>
       </span>
     </button>

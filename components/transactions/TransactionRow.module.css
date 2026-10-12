@@ -1,6 +1,6 @@
 .row {
   display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) auto auto;
+  grid-template-columns: 40px minmax(0, 1fr) 112px 176px;
   align-items: center;
   gap: var(--space-4);
   width: 100%;
@@ -32,6 +32,19 @@
   color: var(--color-primary);
 }
 
+.initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+}
+
 .main {
   min-width: 0;
 }
@@ -56,6 +69,7 @@
 .end {
   display: block;
   text-align: right;
+  min-width: 0;
 }
 
 .amount,
@@ -74,4 +88,50 @@
   font-size: var(--text-xs);
   color: var(--color-text-subtle);
   white-space: nowrap;
+}
+
+.status {
+  min-width: 0;
+}
+
+.mobileStatus {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: 36px minmax(0, 1fr) minmax(86px, auto);
+    gap: var(--space-3);
+    min-height: 64px;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .icon,
+  .initials {
+    width: 36px;
+    height: 36px;
+  }
+
+  .main {
+    overflow: hidden;
+  }
+
+  .status {
+    display: none;
+  }
+
+  .mobileStatus {
+    display: inline-flex;
+  }
+
+  .end {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-2);
+  }
+
+  .meta {
+    display: none;
+  }
 }

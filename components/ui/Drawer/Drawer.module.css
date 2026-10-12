@@ -38,7 +38,9 @@
   justify-content: center;
   width: 32px;
   height: 32px;
+  border: 0;
   border-radius: var(--radius-md);
+  background: transparent;
   color: var(--color-text-muted);
   cursor: pointer;
 }

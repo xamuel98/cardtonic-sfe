@@ -11,9 +11,14 @@
   white-space: nowrap;
   cursor: pointer;
   user-select: none;
+  font: inherit;
   transition:
     background-color var(--duration-fast) var(--ease-out),
     border-color var(--duration-fast) var(--ease-out);
+}
+
+.button:disabled {
+  pointer-events: none;
 }
 
 .md {

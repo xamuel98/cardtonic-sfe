@@ -16,7 +16,18 @@ export function UserMenu() {
   const [user, setUser] = useState<User>()
 
   useEffect(() => {
-    getMe().then((res) => setUser(res.data))
+    let active = true
+    getMe()
+      .then((res) => {
+        if (active) setUser(res.data)
+      })
+      .catch(() => {
+        if (active) setUser(undefined)
+      })
+
+    return () => {
+      active = false
+    }
   }, [])
 
   return (
