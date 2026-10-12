@@ -29,6 +29,10 @@
 
 .clearButton {
   margin-bottom: 0;
+  padding-right: var(--space-4);
+  padding-left: var(--space-4);
+  color: var(--color-primary);
+  line-height: 14px;
 }
 
 .listCard {

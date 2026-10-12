@@ -264,7 +264,7 @@ export function TransactionsPageClient() {
           }
         />
         {activeFilters && (
-          <Button variant="secondary" className={styles.clearButton} onClick={clearFilters}>
+          <Button variant="ghost" className={styles.clearButton} onClick={clearFilters}>
             Clear filters
           </Button>
         )}

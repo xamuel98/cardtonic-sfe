@@ -3,20 +3,38 @@
 }
 
 .select {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   width: 100%;
   height: 40px;
   padding: 0 var(--space-10) 0 var(--space-3);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
   background: var(--color-surface);
+  color: var(--color-text);
   font-size: var(--text-md);
-  appearance: none;
+  line-height: 21px;
+  text-align: left;
   cursor: pointer;
 }
 
+.select span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .select:focus {
+  outline: 0;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+.select:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .chevron {
@@ -26,4 +44,49 @@
   transform: translateY(-50%);
   color: var(--color-text-subtle);
   pointer-events: none;
+}
+
+.options {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  right: 0;
+  left: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-1) 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-overlay);
+  overflow: hidden;
+}
+
+.option {
+  display: flex;
+  min-height: 37px;
+  width: 100%;
+  align-items: center;
+  border: 0;
+  padding: var(--space-2) var(--space-3);
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--text-md);
+  line-height: 21px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.option:hover {
+  background: var(--color-bg-subtle);
+}
+
+.selected {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: var(--weight-semibold);
+}
+
+.selected:hover {
+  background: var(--color-primary-soft);
 }
