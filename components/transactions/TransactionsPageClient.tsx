@@ -41,6 +41,9 @@ const STATUS_OPTIONS: readonly SelectOption[] = [
   { value: 'failed', label: 'Failed' },
 ]
 
+const isTerminalTransaction = (transaction: Transaction) =>
+  transaction.status === 'successful' || transaction.status === 'failed'
+
 type RequestStatus = 'idle' | 'loading' | 'success' | 'error'
 type DetailStatus = 'idle' | 'loading' | 'success' | 'not-found' | 'error'
 
@@ -201,7 +204,7 @@ export function TransactionsPageClient() {
     getTransaction(urlState.selectedId, { signal: controller.signal })
       .then((response) => {
         if (controller.signal.aborted) return
-        detailCacheRef.current.set(response.data.id, response.data)
+        if (isTerminalTransaction(response.data)) detailCacheRef.current.set(response.data.id, response.data)
         setDetailState({ status: 'success', transaction: response.data })
       })
       .catch((error: unknown) => {
