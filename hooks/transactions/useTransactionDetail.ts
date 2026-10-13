@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { Transaction } from '@/types/api'
 import { ApiError } from '@/lib/api/client'
 import { getTransaction } from '@/lib/api/endpoints'
-import type { DetailState } from '../transactionPageTypes'
+import type { DetailState } from '@/components/transactions/transactionPageTypes'
 
 export function useTransactionDetail(selectedId: string | undefined) {
   const detailCacheRef = useRef(new Map<string, Transaction>())

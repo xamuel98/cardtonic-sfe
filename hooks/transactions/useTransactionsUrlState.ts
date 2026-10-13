@@ -8,7 +8,7 @@ import {
   hasActiveFilters,
   parseTransactionsUrl,
   type TransactionsUrlState,
-} from '../transactionUtils'
+} from '@/components/transactions/transactionUtils'
 
 export function useTransactionsUrlState() {
   const router = useRouter()

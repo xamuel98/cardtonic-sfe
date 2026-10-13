@@ -2,8 +2,12 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { getTransactions } from '@/lib/api/endpoints'
-import { groupTransactions, TRANSACTIONS_LIMIT, type TransactionsUrlState } from '../transactionUtils'
-import type { ListState } from '../transactionPageTypes'
+import {
+  groupTransactions,
+  TRANSACTIONS_LIMIT,
+  type TransactionsUrlState,
+} from '@/components/transactions/transactionUtils'
+import type { ListState } from '@/components/transactions/transactionPageTypes'
 
 export function useTransactionsList(urlState: TransactionsUrlState, replacePage: (page: number) => void) {
   const [retryToken, setRetryToken] = useState(0)

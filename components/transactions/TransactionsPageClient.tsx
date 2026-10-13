@@ -5,9 +5,9 @@ import { TransactionDetails } from './TransactionDetails'
 import { TransactionsFilters } from './TransactionsFilters'
 import { TransactionsList } from './TransactionsList'
 import { TransactionsPagination } from './TransactionsPagination'
-import { useTransactionDetail } from './hooks/useTransactionDetail'
-import { useTransactionsList } from './hooks/useTransactionsList'
-import { useTransactionsUrlState } from './hooks/useTransactionsUrlState'
+import { useTransactionDetail } from '@/hooks/transactions/useTransactionDetail'
+import { useTransactionsList } from '@/hooks/transactions/useTransactionsList'
+import { useTransactionsUrlState } from '@/hooks/transactions/useTransactionsUrlState'
 import styles from './TransactionsPageClient.module.css'
 
 export function TransactionsPageClient() {
