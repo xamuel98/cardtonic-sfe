@@ -29,8 +29,7 @@
 
 .clearButton {
   margin-bottom: 0;
-  padding-right: var(--space-4);
-  padding-left: var(--space-4);
+  padding-inline: var(--space-4);
   color: var(--color-primary);
   font-weight: var(--weight-semibold);
   line-height: 14px;
@@ -382,6 +381,24 @@
 
 .referenceValue button:hover {
   background: var(--color-bg);
+}
+
+.referenceCopied {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.referenceCopied:hover {
+  background: var(--color-success-soft);
+}
+
+.referenceFailed {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.referenceFailed:hover {
+  background: var(--color-danger-soft);
 }
 
 .skeletonDetailsCircle {
