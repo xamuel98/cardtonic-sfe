@@ -35,15 +35,23 @@ export function useTransactionsUrlState() {
   const updateSearch = useCallback(
     (value: string) => {
       window.clearTimeout(searchTimeoutRef.current)
+
       searchTimeoutRef.current = window.setTimeout(() => {
-        if (value.trim() === urlState.q) return
-        updateUrl((params) => {
-          setOptionalParam(params, 'q', value.trim())
-          params.delete('page')
-        }, 'replace')
+        const query = value.trim()
+        const params = new URLSearchParams(window.location.search)
+
+        if ((params.get('q')?.trim() ?? '') === query) return
+
+        setOptionalParam(params, 'q', query)
+        params.delete('page')
+
+        const next = params.toString()
+        const href = next ? `${pathname}?${next}` : pathname
+
+        router.replace(href, { scroll: false })
       }, 300)
     },
-    [updateUrl, urlState.q]
+    [pathname, router]
   )
 
   const updateType = useCallback(
