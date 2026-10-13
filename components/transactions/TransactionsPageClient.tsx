@@ -66,6 +66,7 @@ export function TransactionsPageClient() {
   const urlState = useMemo(() => parseTransactionsUrl(new URLSearchParams(searchKey)), [searchKey])
   const activeFilters = hasActiveFilters(urlState)
   const searchTimeoutRef = useRef<number | undefined>(undefined)
+  const detailCacheRef = useRef(new Map<string, Transaction>())
 
   const [retryToken, setRetryToken] = useState(0)
   const [detailRetryToken, setDetailRetryToken] = useState(0)
@@ -87,6 +88,11 @@ export function TransactionsPageClient() {
     },
     [pathname, router, searchParams]
   )
+  const updateUrlRef = useRef(updateUrl)
+
+  useEffect(() => {
+    updateUrlRef.current = updateUrl
+  }, [updateUrl])
 
   const updateSearch = useCallback(
     (value: string) => {
@@ -135,7 +141,10 @@ export function TransactionsPageClient() {
         if (controller.signal.aborted) return
         const meta = response.meta
         if (meta && response.data.length === 0 && meta.total > 0 && urlState.page > meta.totalPages) {
-          updateUrl((params) => setOptionalParam(params, 'page', String(meta.totalPages)), 'replace')
+          updateUrlRef.current(
+            (params) => setOptionalParam(params, 'page', String(meta.totalPages)),
+            'replace'
+          )
           return
         }
 
@@ -160,7 +169,7 @@ export function TransactionsPageClient() {
       active = false
       controller.abort()
     }
-  }, [retryToken, updateUrl, urlState.page, urlState.q, urlState.status, urlState.type])
+  }, [retryToken, urlState.page, urlState.q, urlState.status, urlState.type])
 
   useEffect(() => {
     const controller = new AbortController()
@@ -175,13 +184,25 @@ export function TransactionsPageClient() {
       }
     }
 
+    const cachedTransaction = detailCacheRef.current.get(urlState.selectedId)
+    if (cachedTransaction) {
+      queueMicrotask(() => {
+        if (active) setDetailState({ status: 'success', transaction: cachedTransaction })
+      })
+      return () => {
+        active = false
+      }
+    }
+
     queueMicrotask(() => {
       if (active) setDetailState({ status: 'loading' })
     })
 
     getTransaction(urlState.selectedId, { signal: controller.signal })
       .then((response) => {
-        if (!controller.signal.aborted) setDetailState({ status: 'success', transaction: response.data })
+        if (controller.signal.aborted) return
+        detailCacheRef.current.set(response.data.id, response.data)
+        setDetailState({ status: 'success', transaction: response.data })
       })
       .catch((error: unknown) => {
         if (isAbortError(error)) return
