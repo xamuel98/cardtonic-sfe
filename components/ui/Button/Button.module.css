@@ -16,6 +16,10 @@
     border-color var(--duration-fast) var(--ease-out);
 }
 
+.button:disabled {
+  pointer-events: none;
+}
+
 .md {
   height: 40px;
   padding: 0 var(--space-4);

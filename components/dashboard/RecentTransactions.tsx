@@ -16,6 +16,7 @@ export function RecentTransactions() {
   useEffect(() => {
     getTransactions({ limit: 5 })
       .then((res) => setTransactions(res.data))
+      .catch(() => setTransactions([]))
       .finally(() => setIsLoading(false))
   }, [])
 
