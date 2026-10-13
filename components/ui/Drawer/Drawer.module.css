@@ -7,15 +7,41 @@
 
 .panel {
   position: fixed;
+  z-index: 51;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-overlay);
+  outline: none;
+}
+
+.panel[data-desktop-drawer='true'] {
   top: 0;
   right: 0;
   bottom: 0;
-  display: flex;
-  flex-direction: column;
   width: var(--drawer-width);
   max-width: 100%;
-  background: var(--color-surface);
-  box-shadow: var(--shadow-overlay);
+}
+
+.panel[data-mobile-drawer='true'] {
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 96dvh;
+  max-height: 96dvh;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: 0 20px 24px rgb(26 26 46 / 0.18);
+}
+
+.grabberWrap {
+  display: none;
+}
+
+.grabber[data-vaul-handle] {
+  width: 36px;
+  height: 4px;
+  background: var(--color-border-strong);
+  opacity: 1;
 }
 
 .header {
@@ -30,6 +56,7 @@
 .title {
   font-size: var(--text-lg);
   font-weight: var(--weight-bold);
+  line-height: var(--leading-normal);
 }
 
 .close {
@@ -43,14 +70,24 @@
   background: transparent;
   color: var(--color-text-muted);
   cursor: pointer;
+  transition:
+    background 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    color 160ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .close:hover {
   background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.close:active {
+  transform: scale(0.96);
 }
 
 .body {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: var(--space-6);
 }
@@ -61,11 +98,40 @@
 }
 
 @media (max-width: 640px) {
-  .panel {
-    top: auto;
-    left: 0;
-    width: 100%;
-    max-height: 90vh;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  .grabberWrap {
+    display: flex;
+    height: 12px;
+    flex: 0 0 auto;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: var(--space-2);
+  }
+
+  .header {
+    padding: var(--space-4) var(--space-5);
+  }
+
+  .body {
+    padding: var(--space-5);
+  }
+
+  .footer {
+    padding: var(--space-4) var(--space-5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .close {
+    transition: none;
+  }
+
+  .close:active {
+    transform: none;
+  }
+
+  :global([data-vaul-drawer]),
+  :global([data-vaul-overlay]) {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
   }
 }
